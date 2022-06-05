@@ -1,0 +1,11 @@
+type Query{
+    staffs: [Staff]
+    staff(name: String): Staff
+}
+
+type Staff {
+    name: String
+    age: Int
+    country: String
+    salary: Float
+}

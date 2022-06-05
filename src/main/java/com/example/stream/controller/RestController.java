@@ -33,11 +33,22 @@ public class RestController {
 
         StringBuilder data = new StringBuilder();
         for (int i = 0; i < 1_000_000_000; i++) {
+            data.append(LocalDateTime.now());//array size out of VM limits
+        }
+
+        return data.toString();
+    }
+    @GetMapping(value = "/rest2", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String rest2(){
+
+        StringBuilder data = new StringBuilder();
+        for (int i = 0; i < 1_000; i++) {
             data.append(LocalDateTime.now().toString());//array size out of VM limite
         }
 
         return data.toString();
     }
+
 
     @GetMapping(value = "/stream", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StreamingResponseBody> stream(final HttpServletResponse response) {
@@ -117,7 +128,7 @@ public class RestController {
 
             Random randomObj = new Random(1_000);
             List<Staff> employees=  new ArrayList<>();
-            for (int i = 0; i < 1_000_000; i++) {
+            for (int i = 0; i < 1_00_000; i++) {
                 employees.add(new Staff("s"+i, i, "c"+i, randomObj.nextDouble()));
             }
             mapper.writeValue(out, employees);
@@ -125,7 +136,4 @@ public class RestController {
         };
     }
 
-    record Staff(String name, int age, String country, double salary){//one record is 70B
-
-    }
 }
