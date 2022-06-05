@@ -40,7 +40,7 @@ public class RestController {
     }
 
     @GetMapping(value = "/stream", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StreamingResponseBody> download(final HttpServletResponse response) {
+    public ResponseEntity<StreamingResponseBody> stream(final HttpServletResponse response) {
 
         response.setContentType("application/zip");
         response.setHeader(
@@ -77,18 +77,12 @@ public class RestController {
         return new ResponseEntity(stream, HttpStatus.OK);
     }
     @GetMapping(value = "/stream2", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StreamingResponseBody> download2(final HttpServletResponse response) {
-
-//        response.setContentType("application/zip");
-//        response.setHeader(
-//                "Content-Disposition",
-//                "attachment;filename=sample.zip");
+    public ResponseEntity<StreamingResponseBody> stream2() {
 
         StreamingResponseBody stream = out -> {
 
             StringBuilder data = new StringBuilder();
             for (int i = 0; i < 1_000_000_000; i++) {
-//                data.append(LocalDateTime.now().toString());//array size out of VM limite
                 out.write(LocalDateTime.now().toString().getBytes());
             }
             out.close();
@@ -98,13 +92,7 @@ public class RestController {
     }
 
     @GetMapping(value = "/stream3", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StreamingResponseBody> download3(final HttpServletResponse response) {
-
-//        response.setContentType("application/zip");
-//        response.setHeader(
-//                "Content-Disposition",
-//                "attachment;filename=sample.zip");
-
+    public ResponseEntity<StreamingResponseBody> stream3() {
 
 
         StreamingResponseBody stream = out -> {
@@ -113,7 +101,6 @@ public class RestController {
             StringBuilder data = new StringBuilder();
             List<Staff> employees=  new ArrayList<>();
             for (int i = 0; i < 1_000_000; i++) {
-//                data.append(LocalDateTime.now().toString());//array size out of VM limite
                 employees.add(new Staff("s"+i, i, "c"+i, randomObj.nextDouble()));
             }
             mapper.writeValue(out, employees);
@@ -122,8 +109,23 @@ public class RestController {
         log.info("steaming response {} ", stream);
         return new ResponseEntity(stream, HttpStatus.OK);
     }
+    @GetMapping(value = "/stream4", produces = MediaType.APPLICATION_JSON_VALUE)
+    public StreamingResponseBody stream4() {
 
-    record Staff(String name, int age, String country, double salary){
+        log.info("start streaming4...");
+        return out -> {
+
+            Random randomObj = new Random(1_000);
+            List<Staff> employees=  new ArrayList<>();
+            for (int i = 0; i < 1_000_000; i++) {
+                employees.add(new Staff("s"+i, i, "c"+i, randomObj.nextDouble()));
+            }
+            mapper.writeValue(out, employees);
+            out.close();
+        };
+    }
+
+    record Staff(String name, int age, String country, double salary){//one record is 70B
 
     }
 }
