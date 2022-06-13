@@ -26,8 +26,11 @@ public class TestRedisson {
         RedissonRxClient redissonRx = redisson.rxJava();
 
         RMap<Object, Object> map = redisson.getMap("test");
-        map.entrySet().stream().forEach(
-                objectObjectEntry -> log.info(objectObjectEntry.getKey().toString())
-        );
+
+        map.put("name", "jason");
+//        map.keySet().forEach(s -> log.info(s.toString()));
+//        map.entrySet().stream().forEach(
+//                objectObjectEntry -> log.info(objectObjectEntry.getKey().toString())
+//        );
     }
 }

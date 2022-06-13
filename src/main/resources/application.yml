@@ -1,3 +1,9 @@
 dgs:
   graphql:
     schemaLocations: classpath*:schema/**/*schema.graphql*
+spring:
+  redis:
+    host: localhost
+    port: 49153
+    password: redispw
+    username: default
