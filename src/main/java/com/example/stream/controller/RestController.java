@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -29,7 +31,7 @@ public class RestController {
     ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping(value = "/rest", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String rest(){
+    public String rest() {
 
         StringBuilder data = new StringBuilder();
         for (int i = 0; i < 1_000_000_000; i++) {
@@ -38,8 +40,9 @@ public class RestController {
 
         return data.toString();
     }
+
     @GetMapping(value = "/rest2", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String rest2(){
+    public String rest2() {
 
         StringBuilder data = new StringBuilder();
         for (int i = 0; i < 1_000; i++) {
@@ -65,15 +68,15 @@ public class RestController {
             final File directory = new File("C:\\Users\\lwpro\\Projects\\stream\\src");
             final ZipOutputStream zipOut = new ZipOutputStream(out);
 
-            if(directory.exists() && directory.isDirectory()) {
+            if (directory.exists() && directory.isDirectory()) {
                 try {
                     for (final File file : directory.listFiles()) {
-                        final InputStream inputStream=new FileInputStream(filename);
-                        final ZipEntry zipEntry=new ZipEntry(file.getName());
+                        final InputStream inputStream = new FileInputStream(filename);
+                        final ZipEntry zipEntry = new ZipEntry(file.getName());
                         zipOut.putNextEntry(zipEntry);
-                        byte[] bytes=new byte[1024];
+                        byte[] bytes = new byte[1024];
                         int length;
-                        while ((length=inputStream.read(bytes)) >= 0) {
+                        while ((length = inputStream.read(bytes)) >= 0) {
                             zipOut.write(bytes, 0, length);
                         }
                         inputStream.close();
@@ -87,6 +90,7 @@ public class RestController {
         log.info("steaming response {} ", stream);
         return new ResponseEntity(stream, HttpStatus.OK);
     }
+
     @GetMapping(value = "/stream2", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StreamingResponseBody> stream2() {
 
@@ -106,20 +110,22 @@ public class RestController {
     public ResponseEntity<StreamingResponseBody> stream3() {
 
 
+        Random randomObj = new Random(1_000_000);
+        List<Staff> employees = Collections.synchronizedList(new ArrayList<>());
+        IntStream.range(0, 300_000_000)
+                .parallel()
+                .forEach(i ->
+                        employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble()))
+                );
         StreamingResponseBody stream = out -> {
-
-            Random randomObj = new Random(1_000_000);
-            StringBuilder data = new StringBuilder();
-            List<Staff> employees=  new ArrayList<>();
-            for (int i = 0; i < 1_000_000; i++) {
-                employees.add(new Staff("s"+i, i, "c"+i, randomObj.nextDouble()));
-            }
+            log.info("start writing the employees");
             mapper.writeValue(out, employees);
             out.close();
         };
         log.info("steaming response {} ", stream);
         return new ResponseEntity(stream, HttpStatus.OK);
     }
+
     @GetMapping(value = "/stream4", produces = MediaType.APPLICATION_JSON_VALUE)
     public StreamingResponseBody stream4() {
 
@@ -127,9 +133,9 @@ public class RestController {
         return out -> {
 
             Random randomObj = new Random(1_000);
-            List<Staff> employees=  new ArrayList<>();
-            for (int i = 0; i < 1_00_000; i++) {
-                employees.add(new Staff("s"+i, i, "c"+i, randomObj.nextDouble()));
+            List<Staff> employees = new ArrayList<>();
+            for (int i = 0; i < 100_000; i++) {
+                employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble()));
             }
             mapper.writeValue(out, employees);
             out.close();

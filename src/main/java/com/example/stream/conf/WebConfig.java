@@ -25,9 +25,9 @@ public class WebConfig implements AsyncConfigurer {
     public Executor getAsyncExecutor() {
         log.debug("Creating Async Task Executor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(25);
+        executor.setCorePoolSize(50);
+//        executor.setMaxPoolSize(100);
+//        executor.setQueueCapacity(2500);
         return executor;
     }
 
