@@ -44,7 +44,7 @@ public class WebConfig implements AsyncConfigurer {
             public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
                 configurer.setDefaultTimeout(360_000).setTaskExecutor(taskExecutor);
                 configurer.registerCallableInterceptors(callableProcessingInterceptor);
-                WebMvcConfigurer.super.configureAsyncSupport(configurer);
+//                WebMvcConfigurer.super.configureAsyncSupport(configurer);
             }
         };
     }

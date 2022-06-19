@@ -34,7 +34,7 @@ public class StressController {
     List<Staff> employees = Collections.synchronizedList(new ArrayList<>());
 
     {
-        IntStream.range(0, 300_000_000)
+        IntStream.range(0, 10_000_000)
                 .parallel()
                 .forEach(i ->
                         employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble()))
