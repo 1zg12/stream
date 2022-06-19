@@ -1,6 +1,7 @@
 type Query{
     staffs: [Staff]
     staff(name: String): Staff
+    address: [Address]
 }
 
 type Staff {
@@ -8,4 +9,11 @@ type Staff {
     age: Int
     country: String
     salary: Float
+    address: Address
+}
+
+type Address {
+    id: String
+    district: String
+    postcode: Int
 }

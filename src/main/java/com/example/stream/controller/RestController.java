@@ -115,7 +115,7 @@ public class RestController {
         IntStream.range(0, 300_000_000)
                 .parallel()
                 .forEach(i ->
-                        employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble()))
+                        employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble(), null))
                 );
         StreamingResponseBody stream = out -> {
             log.info("start writing the employees");
@@ -135,7 +135,7 @@ public class RestController {
             Random randomObj = new Random(1_000);
             List<Staff> employees = new ArrayList<>();
             for (int i = 0; i < 100_000; i++) {
-                employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble()));
+                employees.add(new Staff("s" + i, i, "c" + i, randomObj.nextDouble(), null));
             }
             mapper.writeValue(out, employees);
             out.close();
